@@ -13,7 +13,6 @@ class App extends React.Component {
         filter: ''
     }
 
-
     addNewContact = (data) => {
         this.setState(prevState => ({
            contacts: [...prevState.contacts, data]
@@ -24,6 +23,21 @@ class App extends React.Component {
         this.setState(prevState => ({
             contacts: [...prevState.contacts.filter(contact => contact.id !== e.target.id)]
         }))
+    }
+
+    componentDidMount() {
+        const parsedContacts = JSON.parse(localStorage.getItem('contacts'))
+        console.log(parsedContacts)
+        if (parsedContacts) {
+            this.setState({contacts: parsedContacts})
+        }
+        }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.contacts !== this.state.contacts) {
+            localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
+            console.log(this.state.contacts)
+        }
     }
 
     changeFilter = e => {
@@ -39,20 +53,7 @@ class App extends React.Component {
             contact.name.toLowerCase().includes(lowerFilter))
     }
 
-   componentDidMount() {
-        const parsedContacts = JSON.parse(localStorage.getItem('contacts'))
-        console.log(parsedContacts)
-        if (parsedContacts) {
-            this.setState({contacts: parsedContacts})
-        }
-        }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.contacts !== this.state.contacts) {
-            localStorage.setItem('contacts', JSON.stringify(this.state.contacts))
-            console.log(this.state.contacts)
-        }
-    }
 
     render() {
 
